@@ -24,7 +24,7 @@ export default function Home() {
   const fetchSchedules = async () => {
     setLoading(true);
 
-    await api.get<ApiResponse<Group>>('/schedule/group/' + student?.group)
+    await api.get<ApiResponse<Group>>('/schedule/group/' + student?.group.name)
       .then(({ data }) => {
         if (data.statusCode != 200) {
           toast.error(data.message);
