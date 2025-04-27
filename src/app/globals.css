@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #3D6390;
+  --color-muted: #f8f8f8;
+  --color-muted-dark: #CFCFCF;
+  --color-dark: #242424;
+  --color-dark-gray: #393939;
+  --color-dark-light-gray: #5f5f5f;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0%);
+  }
+}
+
+.animation-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
