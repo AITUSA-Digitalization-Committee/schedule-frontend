@@ -21,6 +21,26 @@ export default function Home() {
   const weeks = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const [selectedDay, setSelectedDay] = useState(0);
 
+  // Функция для преобразования времени в объект Date
+  const parseTimeToDate = (time: string) => {
+    const [hours, minutes] = time.split(':').map(Number);
+    const now = new Date();
+    now.setHours(hours, minutes, 0, 0); // Устанавливаем часы и минуты, оставляя секунды и миллисекунды равными 0
+    return now;
+  };
+
+  const sortedSchedules = schedules
+    .map((schedule) => {
+      return {
+        ...schedule,
+        startsDate: parseTimeToDate(schedule.starts), // Добавляем новое поле для времени в формате Date
+      };
+    })
+    .sort((a, b) => a.startsDate.getTime() - b.startsDate.getTime()); // Сортируем по времени начала
+
+  // Теперь sortedSchedules содержит расписание, отсортированное по времени начала
+
+
   const fetchSchedules = async () => {
     setLoading(true);
 
@@ -95,7 +115,7 @@ export default function Home() {
       >
         {weeks.map(week => {
 
-          const weekSchedules = schedules.filter(s => s.day == week);
+          const weekSchedules = sortedSchedules.filter(s => s.day === week);
 
           if (!loading && weekSchedules.length == 0) {
             return (
