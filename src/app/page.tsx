@@ -1,14 +1,15 @@
 'use client'
 
-import { api } from "@/api/instance";
+import { AnimatePresence, motion } from "framer-motion";
+import { ApiResponse, Group } from "@/types";
+import { useEffect, useState } from "react";
+
 import MapContainer from "@/components/MapContainer";
 import View from "@/components/View";
+import { api } from "@/api/instance";
+import { toast } from "react-toastify";
 import { useAuth } from "@/hooks/auth";
 import { useSchedule } from "@/hooks/schedule";
-import { ApiResponse, Group } from "@/types";
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 
 export default function Home() {
 
@@ -19,7 +20,10 @@ export default function Home() {
   const [location, setLocation] = useState('');
 
   const weeks = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-  const [selectedDay, setSelectedDay] = useState(0);
+  const [selectedDay, setSelectedDay] = useState(() => {
+    const currentDay = new Date();
+    return currentDay.getUTCDay()
+  });
 
   // Функция для преобразования времени в объект Date
   const parseTimeToDate = (time: string) => {
