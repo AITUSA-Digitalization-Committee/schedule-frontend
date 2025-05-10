@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import Loading from './Loading';
 import { cn } from '@/util/utils';
 
 interface MapProps {
@@ -11,11 +10,17 @@ interface MapProps {
 
 function MapContainer({ open, setOpen, location }: MapProps) {
     const [loading, setLoading] = useState(true);
+    const [iframeKey, setIframeKey] = useState(0);
 
-    // Сброс загрузки при открытии окна
     useEffect(() => {
-        if (open) setLoading(true);
+        if (open) {
+            setLoading(true);
+            // Обновляем ключ при изменении локации, чтобы пересоздать iframe
+            setIframeKey(prev => prev + 1);
+        }
     }, [open, location]);
+
+    const src = `https://map.yeunikey.dev?location=${location}`;
 
     return (
         <div className='fixed z-50'>
@@ -35,14 +40,15 @@ function MapContainer({ open, setOpen, location }: MapProps) {
                 {/* Лоадер */}
                 {loading && (
                     <div className="absolute inset-0 z-10 flex items-center justify-center bg-white">
-                        <Loading />
+                        <div className="w-8 h-8 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin" />
                     </div>
                 )}
 
                 <iframe
-                    src={"https://map.yeunikey.dev?location=" + location}
-                    width={'100%'}
-                    height={'100%'}
+                    key={iframeKey}
+                    src={src}
+                    width="100%"
+                    height="100%"
                     onLoad={() => setLoading(false)}
                     className="relative z-0"
                 ></iframe>
