@@ -21,9 +21,15 @@ function Auth({ children }: AuthProps) {
         const handleMessage = (event: MessageEvent) => {
 
             if (event.data.type === "INIT") {
-                console.log("Received token:", event.data.data)
                 setToken(event.data.data);
             }
+
+            if (event.data.type === "ACTION" && event.data.data == 'back') {
+                if (window.location.pathname != '/') {
+                    window.history.back();
+                }
+            }
+
         };
 
         window.addEventListener("message", handleMessage);
